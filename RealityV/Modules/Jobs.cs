@@ -2,8 +2,6 @@
 {
     public class Jobs
     {
-        public static bool IsModuleActive = false;
-
         /// <summary>
         /// Called in the OnTick event
         /// </summary>

@@ -57,8 +57,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
+    <Compile Include="Modules\Bills.cs" />
     <Compile Include="Modules\Fuel.cs" />
     <Compile Include="Modules\Homeless.cs" />
+    <Compile Include="Modules\Hunger.cs" />
+    <Compile Include="Modules\IncomeTax.cs" />
+    <Compile Include="Modules\Jobs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

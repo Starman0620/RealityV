@@ -8,6 +8,7 @@ using LemonUI;
 using LemonUI.Menus;
 using LemonUI.Items;
 using RealityV.Util;
+using RealityV.Modules;
 
 namespace RealityV
 {
@@ -47,8 +48,19 @@ namespace RealityV
             MainPool.Add(Menu);
 #endif
 
-            if(Config.Modules.Fuel)
-
+            // Initialize all of the modules
+            if (Config.Modules.Fuel)
+                Fuel.Initialize();
+            if (Config.Modules.Bills)
+                Bills.Initialize();
+            if (Config.Modules.Homeless)
+                Homeless.Initialize();
+            if (Config.Modules.Hunger)
+                Hunger.Initialize();
+            if (Config.Modules.IncomeTax)
+                IncomeTax.Initialize();
+            if (Config.Modules.Jobs)
+                Jobs.Initialize();
 
             Tick += OnTick;
         }
