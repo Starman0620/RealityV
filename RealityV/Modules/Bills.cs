@@ -1,6 +1,6 @@
 ﻿namespace RealityV.Modules
 {
-    public class Fuel
+    public class Bills
     {
         public static bool IsModuleActive = false;
 
