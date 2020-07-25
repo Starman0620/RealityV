@@ -22,7 +22,7 @@ namespace RealityV
         ContainerElement Container = new ContainerElement(new PointF(Screen.Width - 200, Screen.Height - 32), new SizeF(200, 32), Color.FromArgb(200, 200, 200, 200));
         TextElement Text = new TextElement("RealityV", new PointF(Screen.Width - 195, Screen.Height - 30), 0.30f, Color.Black, GTA.UI.Font.ChaletLondon);
         ObjectPool MainPool = new ObjectPool();
-        NativeMenu Menu = new NativeMenu("Debug Menu", "Debug options");
+        NativeMenu Menu = new NativeMenu("RealityV Debug Menu", "Debug options");
         NativeItem GoHomeless = new NativeItem("Go homeless");
 #endif
 
