@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Collections.Generic;
 
 using GTA;
 using GTA.UI;
@@ -7,6 +8,7 @@ using GTA.UI;
 using LemonUI;
 using LemonUI.Menus;
 using LemonUI.Items;
+
 using RealityV.Util;
 using RealityV.Modules;
 
@@ -15,7 +17,7 @@ namespace RealityV
     public class Main : Script
     {
         Configuration Config;
-
+        List<Module> Modules = new List<Module>();
 
 
         // Debug stuff
@@ -48,19 +50,21 @@ namespace RealityV
             MainPool.Add(Menu);
 #endif
 
-            // Initialize all of the modules
+            // Initialize all of the necessary modules
             if (Config.Modules.Fuel)
-                Fuel.Initialize();
+                Modules.Add(new Fuel());
             if (Config.Modules.Bills)
-                Bills.Initialize();
+                Modules.Add(new Bills());
             if (Config.Modules.Homeless)
-                Homeless.Initialize();
+                Modules.Add(new Homeless());
             if (Config.Modules.Hunger)
-                Hunger.Initialize();
+                Modules.Add(new Hunger());
             if (Config.Modules.IncomeTax)
-                IncomeTax.Initialize();
+                Modules.Add(new IncomeTax());
             if (Config.Modules.Jobs)
-                Jobs.Initialize();
+                Modules.Add(new Jobs());
+            foreach (Module Mod in Modules)
+                Mod.Initialize();
 
             Tick += OnTick;
         }
@@ -75,7 +79,8 @@ namespace RealityV
                 Menu.Visible = !Menu.Visible;
 #endif
 
-
+            foreach (Module Mod in Modules)
+                Mod.Tick();
         }
     }
 }

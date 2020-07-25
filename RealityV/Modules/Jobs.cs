@@ -1,11 +1,13 @@
-﻿namespace RealityV.Modules
+﻿using RealityV.Util;
+
+namespace RealityV.Modules
 {
-    public class Jobs
+    internal class Jobs : Module
     {
         /// <summary>
         /// Called in the OnTick event
         /// </summary>
-        public static void Tick()
+        public override void Tick()
         {
 
         }
@@ -13,7 +15,7 @@
         /// <summary>
         /// Initializes the module
         /// </summary>
-        public static void Initialize()
+        public override void Initialize()
         {
 
         }
