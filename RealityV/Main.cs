@@ -46,6 +46,10 @@ namespace RealityV
             Menu.UseMouse = false;
             MainPool.Add(Menu);
 #endif
+
+            if(Config.Modules.Fuel)
+
+
             Tick += OnTick;
         }
 
@@ -58,6 +62,8 @@ namespace RealityV
             if (Game.IsControlPressed(Control.Context) && Game.IsControlPressed(Control.Sprint) && !Menu.Visible)
                 Menu.Visible = !Menu.Visible;
 #endif
+
+
         }
     }
 }
