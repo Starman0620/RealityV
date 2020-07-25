@@ -10,6 +10,8 @@ using LemonUI.Menus;
 
 using RealityV.Util;
 using RealityV.Modules;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace RealityV
 {
@@ -36,22 +38,16 @@ namespace RealityV
         public Main()
         {
             Config = Configuration.FromFile();
-
-#if DEBUG
-            int Build = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision;
-            Text.Caption = $"RealityV Debug Build {Build}\nDO NOT DISTRIBUTE";
-            Menu.Add(DrainFuel);
-            Menu.Add(FillFuel);
-            Menu.Add(Starve);
-            Menu.Add(Eat);
-            Menu.Add(GoHomeless);
-            Menu.UseMouse = false;
-            MainPool.Add(Menu);
-#endif
-
             // Initialize all of the necessary modules
             if (Config.Modules.Fuel)
-                Modules.Add(new Fuel());
+            {
+                Fuel FuelMod = new Fuel();
+                DrainFuel.Activated += (object sender, EventArgs e) => {
+                    FuelMod.DrainFuel(); };
+                FillFuel.Activated += (object sender, EventArgs e) => {
+                    FuelMod.FillFuel(); };
+                Modules.Add(FuelMod);
+            }
             if (Config.Modules.Bills)
                 Modules.Add(new Bills());
             if (Config.Modules.Homeless)
@@ -64,6 +60,18 @@ namespace RealityV
                 Modules.Add(new Jobs());
             foreach (Module Mod in Modules)
                 Mod.Initialize();
+
+#if DEBUG
+            int Build = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision;
+            Text.Caption = $"RealityV Build {Build}\nDO NOT DISTRIBUTE";
+            Menu.Add(DrainFuel);
+            Menu.Add(FillFuel);
+            Menu.Add(Starve);
+            Menu.Add(Eat);
+            Menu.Add(GoHomeless);
+            Menu.UseMouse = false;
+            MainPool.Add(Menu);
+#endif
 
             Tick += OnTick;
         }
