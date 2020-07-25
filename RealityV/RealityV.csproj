@@ -63,6 +63,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AssemblyInfo.tt</DependentUpon>
     </Compile>
+    <Compile Include="Util\Configuration.cs" />
+    <Compile Include="Util\Modules.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -8,6 +8,6 @@ namespace RealityV.Modules
 {
     public class Homeless
     {
-
+        public bool PlayerIsHomeless = false;
     }
 }
