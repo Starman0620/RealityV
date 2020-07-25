@@ -23,7 +23,11 @@ namespace RealityV
         TextElement Text = new TextElement("RealityV", new PointF(Screen.Width - 195, Screen.Height - 30), 0.30f, Color.Black, GTA.UI.Font.ChaletLondon);
         ObjectPool MainPool = new ObjectPool();
         NativeMenu Menu = new NativeMenu("RealityV Debug Menu", "Debug options");
-        NativeItem GoHomeless = new NativeItem("Go homeless");
+        NativeItem DrainFuel = new NativeItem("Drain fuel", "Drains all of the fuel out of your vehicle");
+        NativeItem FillFuel = new NativeItem("Fill fuel", "Maxes out your vehicles fuel");
+        NativeItem Starve = new NativeItem("Starve", "Starves the player");
+        NativeItem Eat = new NativeItem("Eat", "Maxes out the players hunger");
+        NativeItem GoHomeless = new NativeItem("Go homeless", "Makes you homeless");
 #endif
 
 
@@ -34,6 +38,10 @@ namespace RealityV
 #if DEBUG
             int Build = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.Revision;
             Text.Caption = $"RealityV Debug Build {Build}\nDO NOT DISTRIBUTE";
+            Menu.Add(DrainFuel);
+            Menu.Add(FillFuel);
+            Menu.Add(Starve);
+            Menu.Add(Eat);
             Menu.Add(GoHomeless);
             Menu.UseMouse = false;
             MainPool.Add(Menu);
