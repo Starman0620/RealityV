@@ -7,7 +7,6 @@ using GTA.UI;
 
 using LemonUI;
 using LemonUI.Menus;
-using LemonUI.Items;
 
 using RealityV.Util;
 using RealityV.Modules;
