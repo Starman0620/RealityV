@@ -44,7 +44,8 @@ namespace RealityV.Modules
             new Vector3(1043.307f, 2672.588f, 39.24903f),
             new Vector3(-721.3615f, -932.5006f, 18.71538f),
             new Vector3(821.1265f, -1030.986f, 25.87164f),
-            new Vector3(2536.900f, 2594.227f, 37.52017f)
+            new Vector3(2536.900f, 2594.227f, 37.52017f),
+            new Vector3(167.4295f, -1560.498f, 28.98856f)
         };
 
         /// <summary>
@@ -66,6 +67,9 @@ namespace RealityV.Modules
             // Set the current vehicle appropriately and runs everything needed when in a vehicle
             if (CurrentVehicle != null)
             {
+                //float Height = 125 - CurrentVehicle.Fuel;
+
+                //FuelBar.Position = new PointF(FuelBar.Position.X, (Screen.Height - 137.5f) + Height);
                 FuelBar.Size = new SizeF(FuelBar.Size.Width, CurrentVehicle.Fuel);
                 FuelBarBackground.Draw();
                 FuelBar.Draw();
@@ -82,13 +86,13 @@ namespace RealityV.Modules
                     switch (CurrentVehicle.Vehicle.Acceleration)
                     {
                         case -1: // Backwards
-                            CurrentVehicle.Fuel -= 0.0010f;
+                            CurrentVehicle.Fuel -= 0.0015f;
                             break;
                         case 0: // Idle
                             CurrentVehicle.Fuel -= .00025f;
                             break;
                         case 1: // Forwards
-                            CurrentVehicle.Fuel -= 0.0025f;
+                            CurrentVehicle.Fuel -= 0.0050f;
                             break;
                     }
                 }
