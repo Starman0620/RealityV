@@ -19,5 +19,13 @@ namespace RealityV.Modules
         {
 
         }
+
+        /// <summary>
+        /// Called in the Aborted event
+        /// </summary>
+        public override void Abort()
+        {
+            
+        }
     }
 }

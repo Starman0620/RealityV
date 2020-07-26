@@ -13,6 +13,7 @@ namespace RealityV.Modules
     internal class Fuel : Module
     {
         List<FuelVeh> FuelVehicles = new List<FuelVeh>();
+        List<Blip> Blips = new List<Blip>();
         FuelVeh CurrentVehicle;
         List<Vector3> GasStations = new List<Vector3>()
         {
@@ -62,7 +63,7 @@ namespace RealityV.Modules
                     return ;
                 }
 
-                Screen.ShowSubtitle($"~y~Fuel: ~w~{CurrentVehicle.Fuel}\n~y~Accel: ~w~{CurrentVehicle.Vehicle.Acceleration}\n~y~Game Fuel: ~w~{CurrentVehicle.Vehicle.FuelLevel}", 1);
+                Screen.ShowSubtitle($"~y~Fuel: ~w~{CurrentVehicle.Fuel}", 1);
                 // Fuel depletion
                 switch (CurrentVehicle.Vehicle.Acceleration)
                 {
@@ -85,19 +86,72 @@ namespace RealityV.Modules
             }
             else if (CurrentVehicle == null && Game.Player.Character.IsInVehicle())
                 CurrentVehicle = FuelVehicles.FirstOrDefault(x => x.Vehicle == Game.Player.Character.CurrentVehicle);
+
+            // Gas station stuff
+            foreach (Vector3 Station in GasStations)
+            {
+                World.DrawMarker(MarkerType.VerticalCylinder, new Vector3(Station.X, Station.Y, Station.Z - 1), Vector3.Zero, Vector3.Zero, new Vector3(1, 1, 1), System.Drawing.Color.Yellow);
+                if(World.GetDistance(Station, Game.Player.Character.Position) <= 2.5f && Game.Player.Character.IsInVehicle())
+                {
+                    int Cost = (int)Math.Round(((100.0f - CurrentVehicle.Fuel) * .25f));
+                    if (Cost == 0) Cost = 1;
+                    if (Game.Player.Money >= Cost)
+                    {
+                        Screen.ShowHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to refuel (${Cost})");
+                        if(Game.IsControlJustPressed(Control.Context))
+                        {
+                            Screen.FadeOut(1500);
+                            Script.Wait(1500);
+                            CurrentVehicle.Fuel = 100;
+                            Game.Player.Money -= Cost;
+                            Script.Wait(1500);
+                            Screen.FadeIn(1500);
+                        }
+                    }
+                    else
+                        Screen.ShowHelpTextThisFrame($"You cannot afford to refuel this vehicle. The cost is ${Cost}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called in the Aborted event
+        /// </summary>
+        public override void Abort()
+        {
+            // Delete all of the gas station blips
+            foreach (Blip GasBlip in Blips)
+                GasBlip.Delete();
         }
 
         /// <summary>
         /// Initializes the module
         /// </summary>
-        public override void Initialize() {    }
+        public override void Initialize() 
+        {  
+            // Create all of the gas station blips
+            foreach(Vector3 Station in GasStations)
+            {
+                Blip NewBlip = World.CreateBlip(Station);
+                NewBlip.Sprite = BlipSprite.JerryCan;
+                NewBlip.Name = "Gas Station";
+                NewBlip.Color = BlipColor.Red;
+                NewBlip.IsShortRange = true;
+                Blips.Add(NewBlip);
+            }
+        }
 
+        /// <summary>
+        /// Drains all of the fuel from the current vehicle, for debug menu
+        /// </summary>
         public void DrainFuel()
         {
             if(CurrentVehicle != null)
                 CurrentVehicle.Fuel = 0;
         }
-
+        /// <summary>
+        /// Fills the current vehicle with fuel, for debug menu
+        /// </summary>
         public void FillFuel()
         {
             if (CurrentVehicle != null)

@@ -10,5 +10,9 @@
         /// Called in the OnTick event
         /// </summary>
         public abstract void Tick();
+        /// <summary>
+        /// Called in the OnAborted event
+        /// </summary>
+        public abstract void Abort();
     }
 }

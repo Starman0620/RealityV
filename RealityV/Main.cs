@@ -74,6 +74,11 @@ namespace RealityV
 #endif
 
             Tick += OnTick;
+            Aborted += (object sender, EventArgs e) =>
+            {
+                foreach (Module Mod in Modules)
+                    Mod.Abort();
+            };
         }
 
         private void OnTick(object sender, EventArgs e)
