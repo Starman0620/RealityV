@@ -93,7 +93,7 @@ namespace RealityV.Modules
                 World.DrawMarker(MarkerType.VerticalCylinder, new Vector3(Station.X, Station.Y, Station.Z - 1), Vector3.Zero, Vector3.Zero, new Vector3(1, 1, 1), System.Drawing.Color.Yellow);
                 if(World.GetDistance(Station, Game.Player.Character.Position) <= 2.5f && Game.Player.Character.IsInVehicle())
                 {
-                    int Cost = (int)Math.Round(((100.0f - CurrentVehicle.Fuel) * .25f));
+                    int Cost = (int)Math.Round(((100.0f - CurrentVehicle.Fuel) * .50f));
                     if (Cost == 0) Cost = 1;
                     if (Game.Player.Money >= Cost)
                     {
