@@ -64,18 +64,22 @@ namespace RealityV.Modules
                 }
 
                 Screen.ShowSubtitle($"~y~Fuel: ~w~{CurrentVehicle.Fuel}", 1);
-                // Fuel depletion
-                switch (CurrentVehicle.Vehicle.Acceleration)
+
+                if (CurrentVehicle.Vehicle.IsEngineRunning)
                 {
-                    case -1: // Backwards
-                        CurrentVehicle.Fuel -= 0.0010f;
-                        break;
-                    case 0: // Idle
-                        CurrentVehicle.Fuel -= 0.0001f;
-                        break;
-                    case 1: // Forwards
-                        CurrentVehicle.Fuel -= 0.0020f;
-                        break;
+                    // Fuel depletion
+                    switch (CurrentVehicle.Vehicle.Acceleration)
+                    {
+                        case -1: // Backwards
+                            CurrentVehicle.Fuel -= 0.0010f;
+                            break;
+                        case 0: // Idle
+                            CurrentVehicle.Fuel -= 0.0001f;
+                            break;
+                        case 1: // Forwards
+                            CurrentVehicle.Fuel -= 0.0020f;
+                            break;
+                    }
                 }
 
                 // Engine killing
