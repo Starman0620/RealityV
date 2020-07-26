@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 
 using GTA;
 using GTA.Math;
@@ -15,6 +16,8 @@ namespace RealityV.Modules
         List<FuelVeh> FuelVehicles = new List<FuelVeh>();
         List<Blip> Blips = new List<Blip>();
         FuelVeh CurrentVehicle;
+        ContainerElement FuelBarBackground = new ContainerElement(new PointF(225, Screen.Height - 139), new SizeF(15, 128), Color.FromArgb(190, 30, 30, 30));
+        ContainerElement FuelBar = new ContainerElement(new PointF(226, Screen.Height - 137.5f), new SizeF(13, 125), Color.FromArgb(200, 128, 128, 0), false);
         List<Vector3> GasStations = new List<Vector3>()
         {
             new Vector3(1211.756f, -1407.93f, 34.67278f),
@@ -35,21 +38,24 @@ namespace RealityV.Modules
             new Vector3(47.44701f, 2777.335f, 57.40466f),
             new Vector3(2676.54f, 3263.63f, 54.76064f),
             new Vector3(-2094.415f, -320.5872f, 12.54607f),
-            new Vector3(266.9666f, -1253.497f, 28.51884f)
+            new Vector3(266.9666f, -1253.497f, 28.51884f),
+            new Vector3(1788.137f, 3330.988f, 40.96835f),
+            new Vector3(1210.248f, 2660.764f, 37.50904f),
+            new Vector3(1043.307f, 2672.588f, 39.24903f),
+            new Vector3(-721.3615f, -932.5006f, 18.71538f)
         };
 
         /// <summary>
         /// Called in the OnTick event
         /// </summary>
         public override void Tick()
-        {
-            // Create a new FuelVeh for the current vehicle if there isn't already one
+        {            // Create a new FuelVeh for the current vehicle if there isn't already one
             if(Game.Player.Character.IsInVehicle() && !Game.Player.Character.CurrentVehicle.Model.IsBicycle && FuelVehicles.FirstOrDefault(x => x.Vehicle == Game.Player.Character.CurrentVehicle) == null)
             {
                 CurrentVehicle = new FuelVeh()
                 {
                     FType = FuelType.Gas,
-                    Fuel = new Random().Next(10, 100),
+                    Fuel = new Random().Next(10, 125),
                     Vehicle = Game.Player.Character.CurrentVehicle
                 };
                 FuelVehicles.Add(CurrentVehicle);
@@ -58,13 +64,15 @@ namespace RealityV.Modules
             // Set the current vehicle appropriately and runs everything needed when in a vehicle
             if (CurrentVehicle != null)
             {
+                FuelBar.Size = new SizeF(FuelBar.Size.Width, CurrentVehicle.Fuel);
+                FuelBarBackground.Draw();
+                FuelBar.Draw();
+
                 if (!Game.Player.Character.IsInVehicle())
                 {
                     CurrentVehicle = null;
                     return ;
                 }
-
-                Screen.ShowSubtitle($"~y~Fuel: ~w~{CurrentVehicle.Fuel}", 1);
 
                 if (CurrentVehicle.Vehicle.IsEngineRunning)
                 {
@@ -75,10 +83,10 @@ namespace RealityV.Modules
                             CurrentVehicle.Fuel -= 0.0010f;
                             break;
                         case 0: // Idle
-                            CurrentVehicle.Fuel -= 0.0001f;
+                            CurrentVehicle.Fuel -= .00025f;
                             break;
                         case 1: // Forwards
-                            CurrentVehicle.Fuel -= 0.0020f;
+                            CurrentVehicle.Fuel -= 0.0025f;
                             break;
                     }
                 }
@@ -98,7 +106,7 @@ namespace RealityV.Modules
                 World.DrawMarker(MarkerType.VerticalCylinder, new Vector3(Station.X, Station.Y, Station.Z - 1), Vector3.Zero, Vector3.Zero, new Vector3(1, 1, 1), System.Drawing.Color.Yellow);
                 if(World.GetDistance(Station, Game.Player.Character.Position) <= 2.5f && Game.Player.Character.IsInVehicle())
                 {
-                    int Cost = (int)Math.Round(((100.0f - CurrentVehicle.Fuel) * .50f));
+                    int Cost = (int)Math.Round((125.0f - CurrentVehicle.Fuel) * .50f);
                     if (Cost == 0) Cost = 1;
                     if (Game.Player.Money >= Cost)
                     {
@@ -107,7 +115,7 @@ namespace RealityV.Modules
                         {
                             Screen.FadeOut(1500);
                             Script.Wait(1500);
-                            CurrentVehicle.Fuel = 100;
+                            CurrentVehicle.Fuel = 125;
                             Game.Player.Money -= Cost;
                             Script.Wait(1500);
                             Screen.FadeIn(1500);
@@ -160,7 +168,7 @@ namespace RealityV.Modules
         public void FillFuel()
         {
             if (CurrentVehicle != null)
-                CurrentVehicle.Fuel = 100;
+                CurrentVehicle.Fuel = 125;
         }
     }
 
