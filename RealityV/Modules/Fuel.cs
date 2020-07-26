@@ -186,6 +186,6 @@ namespace RealityV.Modules
 
     enum FuelType
     {
-        Gas, Diesel, Kerosene
+        Gas, Diesel
     }
 }
