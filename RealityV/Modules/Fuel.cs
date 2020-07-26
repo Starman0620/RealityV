@@ -42,7 +42,9 @@ namespace RealityV.Modules
             new Vector3(1788.137f, 3330.988f, 40.96835f),
             new Vector3(1210.248f, 2660.764f, 37.50904f),
             new Vector3(1043.307f, 2672.588f, 39.24903f),
-            new Vector3(-721.3615f, -932.5006f, 18.71538f)
+            new Vector3(-721.3615f, -932.5006f, 18.71538f),
+            new Vector3(821.1265f, -1030.986f, 25.87164f),
+            new Vector3(2536.900f, 2594.227f, 37.52017f)
         };
 
         /// <summary>
@@ -100,29 +102,32 @@ namespace RealityV.Modules
             else if (CurrentVehicle == null && Game.Player.Character.IsInVehicle())
                 CurrentVehicle = FuelVehicles.FirstOrDefault(x => x.Vehicle == Game.Player.Character.CurrentVehicle);
 
-            // Gas station stuff
-            foreach (Vector3 Station in GasStations)
+            if (Game.Player.Character.IsInVehicle())
             {
-                World.DrawMarker(MarkerType.VerticalCylinder, new Vector3(Station.X, Station.Y, Station.Z - 1), Vector3.Zero, Vector3.Zero, new Vector3(1, 1, 1), System.Drawing.Color.Yellow);
-                if(World.GetDistance(Station, Game.Player.Character.Position) <= 2.5f && Game.Player.Character.IsInVehicle())
+                // Gas station stuff
+                foreach (Vector3 Station in GasStations)
                 {
-                    int Cost = (int)Math.Round((125.0f - CurrentVehicle.Fuel) * .50f);
-                    if (Cost == 0) Cost = 1;
-                    if (Game.Player.Money >= Cost)
+                    World.DrawMarker(MarkerType.VerticalCylinder, new Vector3(Station.X, Station.Y, Station.Z - 1), Vector3.Zero, Vector3.Zero, new Vector3(1, 1, 1), System.Drawing.Color.Yellow);
+                    if (World.GetDistance(Station, Game.Player.Character.Position) <= 2.5f)
                     {
-                        Screen.ShowHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to refuel (${Cost})");
-                        if(Game.IsControlJustPressed(Control.Context))
+                        int Cost = (int)Math.Round((125.0f - CurrentVehicle.Fuel) * .50f);
+                        if (Cost == 0) Cost = 1;
+                        if (Game.Player.Money >= Cost)
                         {
-                            Screen.FadeOut(1500);
-                            Script.Wait(1500);
-                            CurrentVehicle.Fuel = 125;
-                            Game.Player.Money -= Cost;
-                            Script.Wait(1500);
-                            Screen.FadeIn(1500);
+                            Screen.ShowHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to refuel (${Cost})");
+                            if (Game.IsControlJustPressed(Control.Context))
+                            {
+                                Screen.FadeOut(1500);
+                                Script.Wait(1500);
+                                CurrentVehicle.Fuel = 125;
+                                Game.Player.Money -= Cost;
+                                Script.Wait(1500);
+                                Screen.FadeIn(1500);
+                            }
                         }
+                        else
+                            Screen.ShowHelpTextThisFrame($"You cannot afford to refuel this vehicle. The cost is ${Cost}");
                     }
-                    else
-                        Screen.ShowHelpTextThisFrame($"You cannot afford to refuel this vehicle. The cost is ${Cost}");
                 }
             }
         }
