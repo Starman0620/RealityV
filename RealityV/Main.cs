@@ -66,9 +66,9 @@ namespace RealityV
             Text.Caption = $"RealityV Build {Build}\nDO NOT DISTRIBUTE";
             Menu.Add(DrainFuel);
             Menu.Add(FillFuel);
-            Menu.Add(Starve);
-            Menu.Add(Eat);
-            Menu.Add(GoHomeless);
+            //Menu.Add(Starve);
+            //Menu.Add(Eat);
+            //Menu.Add(GoHomeless);
             Menu.UseMouse = false;
             MainPool.Add(Menu);
 #endif
