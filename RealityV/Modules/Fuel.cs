@@ -34,7 +34,8 @@ namespace RealityV.Modules
             new Vector3(263.78f, 2604.741f, 44.39055f),
             new Vector3(47.44701f, 2777.335f, 57.40466f),
             new Vector3(2676.54f, 3263.63f, 54.76064f),
-            new Vector3(-2094.415f, -320.5872f, 12.54607f)
+            new Vector3(-2094.415f, -320.5872f, 12.54607f),
+            new Vector3(266.9666f, -1253.497f, 28.51884f)
         };
 
         /// <summary>
