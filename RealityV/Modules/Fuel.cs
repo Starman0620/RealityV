@@ -67,9 +67,7 @@ namespace RealityV.Modules
             // Set the current vehicle appropriately and runs everything needed when in a vehicle
             if (CurrentVehicle != null)
             {
-                //float Height = 125 - CurrentVehicle.Fuel;
-
-                //FuelBar.Position = new PointF(FuelBar.Position.X, (Screen.Height - 137.5f) + Height);
+                FuelBar.Position = new PointF(FuelBar.Position.X, Screen.Height - 137.5f + 125 - CurrentVehicle.Fuel);
                 FuelBar.Size = new SizeF(FuelBar.Size.Width, CurrentVehicle.Fuel);
                 FuelBarBackground.Draw();
                 FuelBar.Draw();
