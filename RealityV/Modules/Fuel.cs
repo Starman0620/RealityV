@@ -96,8 +96,11 @@ namespace RealityV.Modules
                 }
 
                 // Engine killing
-                if (CurrentVehicle.Fuel <= 0.0f && CurrentVehicle.Vehicle.IsEngineRunning)
+                if (CurrentVehicle.Fuel <= 0.0f && CurrentVehicle.Vehicle.IsEngineRunning && CurrentVehicle.Vehicle.FuelLevel != 0)
+                {
+                    Screen.ShowHelpTextThisFrame("You have run out of fuel! Use a jerry can to refuel your vehicle.");
                     CurrentVehicle.Vehicle.FuelLevel = 0;
+                }
                 else if (CurrentVehicle.Fuel > 0.0f)
                     CurrentVehicle.Vehicle.FuelLevel = 60;
             }
