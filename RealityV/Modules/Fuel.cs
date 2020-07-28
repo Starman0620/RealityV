@@ -57,7 +57,6 @@ namespace RealityV.Modules
             {
                 CurrentVehicle = new FuelVeh()
                 {
-                    FType = FuelType.Gas,
                     Fuel = new Random().Next(10, 125),
                     Vehicle = Game.Player.Character.CurrentVehicle
                 };
@@ -186,11 +185,5 @@ namespace RealityV.Modules
     {
         public Vehicle Vehicle { get; set; }
         public float Fuel { get; set; }
-        public FuelType FType { get; set; }
-    }
-
-    enum FuelType
-    {
-        Gas, Diesel
     }
 }
