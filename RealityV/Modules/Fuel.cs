@@ -8,11 +8,14 @@ using GTA.Math;
 using GTA.UI;
 
 using RealityV.Util;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace RealityV.Modules
 {
     internal class Fuel : Module
     {
+        FuelConfig Config;
         List<FuelVeh> FuelVehicles = new List<FuelVeh>();
         List<Blip> Blips = new List<Blip>();
         FuelVeh CurrentVehicle;
@@ -83,13 +86,13 @@ namespace RealityV.Modules
                     switch (CurrentVehicle.Vehicle.Acceleration)
                     {
                         case -1: // Backwards
-                            CurrentVehicle.Fuel -= 0.0015f;
+                            CurrentVehicle.Fuel -= Config.DecelerateDepletion;
                             break;
                         case 0: // Idle
-                            CurrentVehicle.Fuel -= .00025f;
+                            CurrentVehicle.Fuel -= Config.IdleDepletion;
                             break;
                         case 1: // Forwards
-                            CurrentVehicle.Fuel -= 0.0050f;
+                            CurrentVehicle.Fuel -= Config.AccelerateDepletion;
                             break;
                     }
                 }
@@ -161,6 +164,8 @@ namespace RealityV.Modules
                 NewBlip.IsShortRange = true;
                 Blips.Add(NewBlip);
             }
+
+            Config = FuelConfig.FromFile();
         }
 
         /// <summary>
@@ -185,5 +190,41 @@ namespace RealityV.Modules
     {
         public Vehicle Vehicle { get; set; }
         public float Fuel { get; set; }
+    }
+
+    public class FuelConfig
+    {
+        /// <summary>
+        /// Loads the configuration from XML
+        /// </summary>
+        /// <returns></returns>
+        public static FuelConfig FromFile()
+        {
+            XmlSerializer Serializer = new XmlSerializer(typeof(FuelConfig));
+            if (File.Exists($"{Globals.FuelPath}\\Config.xml"))
+            {
+                FileStream Stream = new FileStream($"{Globals.FuelPath}\\Config.xml", FileMode.Open);
+                FuelConfig Config = (FuelConfig)Serializer.Deserialize(Stream);
+                Stream.Close();
+                return Config;
+            }
+            else
+            {
+                FileStream Stream = new FileStream($"{Globals.FuelPath}\\Config.xml", FileMode.CreateNew);
+                FuelConfig Config = new FuelConfig()
+                {
+                    AccelerateDepletion = 0.0075f,
+                    IdleDepletion = 0.00025f,
+                    DecelerateDepletion = 0.0015f
+                };
+                Serializer.Serialize(Stream, Config);
+                Stream.Close();
+                return Config;
+            }
+        }
+
+        public float AccelerateDepletion { get; set; }
+        public float IdleDepletion { get; set; }
+        public float DecelerateDepletion { get; set; }
     }
 }

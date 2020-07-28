@@ -12,6 +12,7 @@ using RealityV.Util;
 using RealityV.Modules;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace RealityV
 {
@@ -37,6 +38,13 @@ namespace RealityV
 
         public Main()
         {
+            if (!Directory.Exists(Globals.ModPath))
+                Directory.CreateDirectory(Globals.ModPath);
+            if (!Directory.Exists(Globals.ModulePath))
+                Directory.CreateDirectory(Globals.ModulePath);
+            if (!Directory.Exists(Globals.FuelPath))
+                Directory.CreateDirectory(Globals.FuelPath);
+
             Config = Configuration.FromFile();
             // Initialize all of the necessary modules
             if (Config.Modules.Fuel)
