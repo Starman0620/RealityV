@@ -19,6 +19,8 @@ namespace RealityV.Modules
         List<FuelVeh> FuelVehicles = new List<FuelVeh>();
         List<Blip> Blips = new List<Blip>();
         FuelVeh CurrentVehicle;
+        float Weight = 0.0f;
+        int LastWeightChangeHour = 0;
         ContainerElement FuelBarBackground = new ContainerElement(new PointF(225, Screen.Height - 139), new SizeF(15, 128), Color.FromArgb(190, 30, 30, 30));
         ContainerElement FuelBar = new ContainerElement(new PointF(226, Screen.Height - 137.5f), new SizeF(13, 125), Color.FromArgb(200, 128, 128, 0), false);
         List<Vector3> GasStations = new List<Vector3>()
@@ -64,6 +66,12 @@ namespace RealityV.Modules
                     Vehicle = Game.Player.Character.CurrentVehicle
                 };
                 FuelVehicles.Add(CurrentVehicle);
+            }
+
+            if(LastWeightChangeHour != World.CurrentTimeOfDay.Hours)
+            {
+                LastWeightChangeHour = World.CurrentTimeOfDay.Hours;
+                Weight = ((float)new Random().Next(Config.MinimumPriceChange, Config.MaximumPriceChange)) / 100.0f;
             }
 
             // Set the current vehicle appropriately and runs everything needed when in a vehicle
@@ -118,7 +126,8 @@ namespace RealityV.Modules
                     World.DrawMarker(MarkerType.VerticalCylinder, new Vector3(Station.X, Station.Y, Station.Z - 1), Vector3.Zero, Vector3.Zero, new Vector3(1, 1, 1), System.Drawing.Color.Yellow);
                     if (World.GetDistance(Station, Game.Player.Character.Position) <= 2.5f)
                     {
-                        int Cost = (int)Math.Round((125.0f - CurrentVehicle.Fuel) * .50f);
+                        float Multiplier = .50f + Weight;
+                        int Cost = (int)Math.Round((125.0f - CurrentVehicle.Fuel) * Multiplier);
                         if (Cost == 0) Cost = 1;
                         if (Game.Player.Money >= Cost)
                         {
@@ -216,7 +225,9 @@ namespace RealityV.Modules
                 {
                     AccelerateDepletion = 0.0075f,
                     IdleDepletion = 0.00025f,
-                    DecelerateDepletion = 0.0015f
+                    DecelerateDepletion = 0.0015f,
+                    MinimumPriceChange = -15,
+                    MaximumPriceChange = 15
                 };
                 Serializer.Serialize(Stream, Config);
                 Stream.Close();
@@ -227,5 +238,7 @@ namespace RealityV.Modules
         public float AccelerateDepletion { get; set; }
         public float IdleDepletion { get; set; }
         public float DecelerateDepletion { get; set; }
+        public int MinimumPriceChange { get; set; }
+        public int MaximumPriceChange { get; set; }
     }
 }
