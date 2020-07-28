@@ -56,7 +56,7 @@ namespace RealityV.Modules
         /// </summary>
         public override void Tick()
         {            // Create a new FuelVeh for the current vehicle if there isn't already one
-            if(Game.Player.Character.IsInVehicle() && !Game.Player.Character.CurrentVehicle.Model.IsBicycle && FuelVehicles.FirstOrDefault(x => x.Vehicle == Game.Player.Character.CurrentVehicle) == null)
+            if(Game.Player.Character.IsInVehicle() && FuelVehicles.FirstOrDefault(x => x.Vehicle == Game.Player.Character.CurrentVehicle) == null)
             {
                 CurrentVehicle = new FuelVeh()
                 {
@@ -67,7 +67,8 @@ namespace RealityV.Modules
             }
 
             // Set the current vehicle appropriately and runs everything needed when in a vehicle
-            if (CurrentVehicle != null)
+            // Also yes, spaghetti code.
+            if (CurrentVehicle != null && !Game.Player.Character.CurrentVehicle.Model.IsBicycle && !Game.Player.Character.CurrentVehicle.Model.IsPlane && !Game.Player.Character.CurrentVehicle.Model.IsBlimp && !Game.Player.Character.CurrentVehicle.Model.IsHelicopter && !Game.Player.Character.CurrentVehicle.Model.IsBoat)
             {
                 FuelBar.Position = new PointF(FuelBar.Position.X, Screen.Height - 137.5f + 125 - CurrentVehicle.Fuel);
                 FuelBar.Size = new SizeF(FuelBar.Size.Width, CurrentVehicle.Fuel);
