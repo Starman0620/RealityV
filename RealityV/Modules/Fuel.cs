@@ -19,6 +19,7 @@ namespace RealityV.Modules
         List<FuelVeh> FuelVehicles = new List<FuelVeh>();
         List<Blip> Blips = new List<Blip>();
         List<Model> PumpModels = new List<Model>();
+        List<Model> BlacklistedModels = new List<Model>();
         FuelVeh CurrentVehicle;
         float Weight = 0.0f;
         int LastWeightChangeHour = 0;
@@ -48,7 +49,7 @@ namespace RealityV.Modules
 
             // Set the current vehicle appropriately and runs everything needed when in a vehicle
             // Also yes, spaghetti code.
-            if (CurrentVehicle != null && !Game.Player.Character.CurrentVehicle.Model.IsBicycle && !Game.Player.Character.CurrentVehicle.Model.IsPlane && !Game.Player.Character.CurrentVehicle.Model.IsBlimp && !Game.Player.Character.CurrentVehicle.Model.IsHelicopter && !Game.Player.Character.CurrentVehicle.Model.IsBoat)
+            if (CurrentVehicle != null && !BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model) && !Game.Player.Character.CurrentVehicle.Model.IsBicycle && !Game.Player.Character.CurrentVehicle.Model.IsPlane && !Game.Player.Character.CurrentVehicle.Model.IsBlimp && !Game.Player.Character.CurrentVehicle.Model.IsHelicopter && !Game.Player.Character.CurrentVehicle.Model.IsBoat)
             {
                 FuelBar.Position = new PointF(FuelBar.Position.X, Screen.Height - 137.5f + 125 - CurrentVehicle.Fuel);
                 FuelBar.Size = new SizeF(FuelBar.Size.Width, CurrentVehicle.Fuel);
@@ -138,6 +139,8 @@ namespace RealityV.Modules
             Config = FuelConfig.FromFile();
             foreach (string Pump in Config.FuelPumpModels)
                 PumpModels.Add(new Model(Pump));
+            foreach (string Vehicle in Config.VehicleBlacklist)
+                BlacklistedModels.Add(new Model(Vehicle));
 
             // Create all of the gas station blips
             foreach (Vector3 Station in Config.GasStationBlips)
@@ -207,6 +210,22 @@ namespace RealityV.Modules
                     DecelerateDepletion = 0.0015f,
                     MinimumPriceChange = -15,
                     MaximumPriceChange = 15,
+                    VehicleBlacklist = new List<string>()
+                    {
+                        "raiden",
+                        "cyclone",
+                        "voltic",
+                        "caddy",
+                        "caddy2",
+                        "caddy3",
+                        "surge",
+                        "khamelion",
+                        "airtug",
+                        "neon",
+                        "tezeract",
+                        "airtug",
+                        "imorgon"
+                    },
                     FuelPumpModels = new List<string>()
                     {
                         "prop_gas_pump_1a",
@@ -259,6 +278,7 @@ namespace RealityV.Modules
         public float DecelerateDepletion { get; set; }
         public int MinimumPriceChange { get; set; }
         public int MaximumPriceChange { get; set; }
+        public List<string> VehicleBlacklist { get; set; }
         public List<string> FuelPumpModels { get; set; }
         public List<Vector3> GasStationBlips { get; set; }
     }
