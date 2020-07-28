@@ -30,7 +30,8 @@ namespace RealityV.Modules
         /// Called in the OnTick event
         /// </summary>
         public override void Tick()
-        {            // Create a new FuelVeh for the current vehicle if there isn't already one
+        {            
+            // Create a new FuelVeh for the current vehicle if there isn't already one
             if(Game.Player.Character.IsInVehicle() && FuelVehicles.FirstOrDefault(x => x.Vehicle == Game.Player.Character.CurrentVehicle) == null)
             {
                 CurrentVehicle = new FuelVeh()
@@ -49,7 +50,7 @@ namespace RealityV.Modules
 
             // Set the current vehicle appropriately and runs everything needed when in a vehicle
             // Also yes, spaghetti code.
-            if (CurrentVehicle != null && !BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model) && !Game.Player.Character.CurrentVehicle.Model.IsBicycle && !Game.Player.Character.CurrentVehicle.Model.IsPlane && !Game.Player.Character.CurrentVehicle.Model.IsBlimp && !Game.Player.Character.CurrentVehicle.Model.IsHelicopter && !Game.Player.Character.CurrentVehicle.Model.IsBoat)
+            if (CurrentVehicle != null && !BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model) && !CurrentVehicle.Vehicle.Model.IsBicycle && !CurrentVehicle.Vehicle.Model.IsPlane && !CurrentVehicle.Vehicle.Model.IsBlimp && !CurrentVehicle.Vehicle.Model.IsHelicopter && !CurrentVehicle.Vehicle.Model.IsBoat)
             {
                 FuelBar.Position = new PointF(FuelBar.Position.X, Screen.Height - 137.5f + 125 - CurrentVehicle.Fuel);
                 FuelBar.Size = new SizeF(FuelBar.Size.Width, CurrentVehicle.Fuel);
@@ -91,6 +92,27 @@ namespace RealityV.Modules
             else if (CurrentVehicle == null && Game.Player.Character.IsInVehicle())
                 CurrentVehicle = FuelVehicles.FirstOrDefault(x => x.Vehicle == Game.Player.Character.CurrentVehicle);
 
+            if (Game.Player.Character.Weapons.Current.Hash == WeaponHash.PetrolCan)
+            {
+                foreach (FuelVeh Vehicle in FuelVehicles)
+                {
+                    if (Vehicle.Vehicle.Exists() && !BlacklistedModels.Contains(Vehicle.Vehicle.Model) && World.GetDistance(Vehicle.Vehicle.Position, Game.Player.Character.Position) <= 3.0f && Game.Player.Character.Weapons.Current.Ammo > 0 && Vehicle.Fuel <= 125)
+                    {
+                        Screen.ShowHelpTextThisFrame("Hold ~INPUT_AIM~ to refuel this vehicle");
+                        if (Game.IsControlPressed(Control.Aim)) 
+                        {
+                            Vehicle.Fuel++;
+                            Game.Player.Character.Weapons.Current.Ammo -= 50;
+                            FuelBar.Position = new PointF(FuelBar.Position.X, Screen.Height - 137.5f + 125 - Vehicle.Fuel);
+                            FuelBar.Size = new SizeF(FuelBar.Size.Width, Vehicle.Fuel);
+                            FuelBarBackground.Draw();
+                            FuelBar.Draw();
+                            Screen.ShowSubtitle($"~y~Fuel: ~w~{Vehicle.Fuel}", 1);
+                        }
+                    }
+                }
+            }
+
             if (Game.Player.Character.IsInVehicle())
             {
                 // Gas station stuff
@@ -101,7 +123,7 @@ namespace RealityV.Modules
                         float Multiplier = .50f + Weight;
                         int Cost = (int)Math.Round((125.0f - CurrentVehicle.Fuel) * Multiplier);
                         if (Cost == 0) Cost = 1;
-                        if (Game.Player.Money >= Cost)
+                        if (Game.Player.Money >= Cost && !BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model))
                         {
                             Screen.ShowHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to refuel (${Cost})");
                             if (Game.IsControlJustPressed(Control.Context))
@@ -114,6 +136,8 @@ namespace RealityV.Modules
                                 Screen.FadeIn(1500);
                             }
                         }
+                        else if (BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model))
+                            Screen.ShowHelpTextThisFrame("This vehicle cannot be refueled!");
                         else
                             Screen.ShowHelpTextThisFrame($"You cannot afford to refuel this vehicle. The cost is ${Cost}");
                     }
