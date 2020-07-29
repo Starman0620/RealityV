@@ -96,7 +96,8 @@ namespace RealityV.Modules
             {
                 foreach (FuelVeh Vehicle in FuelVehicles)
                 {
-                    if (Vehicle.Vehicle.Exists() && !BlacklistedModels.Contains(Vehicle.Vehicle.Model) && World.GetDistance(Vehicle.Vehicle.Position, Game.Player.Character.Position) <= 3.0f && Game.Player.Character.Weapons.Current.Ammo > 0 && Vehicle.Fuel <= 125)
+                    // Even more spaghetti code! lovely!
+                    if (Vehicle.Vehicle.Exists() && !BlacklistedModels.Contains(Vehicle.Vehicle.Model) && World.GetDistance(Vehicle.Vehicle.Position, Game.Player.Character.Position) <= 3.0f && Game.Player.Character.Weapons.Current.Ammo > 0 && Vehicle.Fuel <= 125 && !Vehicle.Vehicle.Model.IsBicycle && !Vehicle.Vehicle.Model.IsPlane && !Vehicle.Vehicle.Model.IsBlimp && !Vehicle.Vehicle.Model.IsHelicopter && !Vehicle.Vehicle.Model.IsBoat)
                     {
                         Screen.ShowHelpTextThisFrame("Hold ~INPUT_AIM~ to refuel this vehicle");
                         if (Game.IsControlPressed(Control.Aim)) 
@@ -113,7 +114,7 @@ namespace RealityV.Modules
                 }
             }
 
-            if (Game.Player.Character.IsInVehicle())
+            if (Game.Player.Character.IsInVehicle() && !BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model))
             {
                 // Gas station stuff
                 foreach (Prop Pump in World.GetNearbyProps(Game.Player.Character.Position, 15, PumpModels.ToArray())) // CHANGE THIS TO THE NEW PUMP SYSTEM
@@ -123,7 +124,7 @@ namespace RealityV.Modules
                         float Multiplier = .50f + Weight;
                         int Cost = (int)Math.Round((125.0f - CurrentVehicle.Fuel) * Multiplier);
                         if (Cost == 0) Cost = 1;
-                        if (Game.Player.Money >= Cost && !BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model))
+                        if (Game.Player.Money >= Cost)
                         {
                             Screen.ShowHelpTextThisFrame($"Press ~INPUT_CONTEXT~ to refuel (${Cost})");
                             if (Game.IsControlJustPressed(Control.Context))
