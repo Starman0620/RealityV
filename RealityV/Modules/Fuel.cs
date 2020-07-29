@@ -114,7 +114,8 @@ namespace RealityV.Modules
                 }
             }
 
-            if (Game.Player.Character.IsInVehicle() && !BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model))
+            // MORE spaghetti code... I really need to stop.
+            if (Game.Player.Character.IsInVehicle() && !BlacklistedModels.Contains(CurrentVehicle.Vehicle.Model) && !CurrentVehicle.Vehicle.Model.IsBicycle && !CurrentVehicle.Vehicle.Model.IsPlane && !CurrentVehicle.Vehicle.Model.IsBlimp && !CurrentVehicle.Vehicle.Model.IsHelicopter && !CurrentVehicle.Vehicle.Model.IsBoat)
             {
                 // Gas station stuff
                 foreach (Prop Pump in World.GetNearbyProps(Game.Player.Character.Position, 15, PumpModels.ToArray())) // CHANGE THIS TO THE NEW PUMP SYSTEM
