@@ -63,7 +63,7 @@ namespace RealityV
             if (Config.Modules.Hunger)
                 Modules.Add(new Hunger());
             if (Config.Modules.IncomeTax)
-                Modules.Add(new IncomeTax());
+                Modules.Add(new Tax());
             if (Config.Modules.Jobs)
                 Modules.Add(new Jobs());
             foreach (Module Mod in Modules)

@@ -2,7 +2,7 @@
 
 namespace RealityV.Modules
 {
-    internal class IncomeTax : Module
+    internal class Tax : Module
     {
         /// <summary>
         /// Called in the OnTick event
