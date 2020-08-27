@@ -24,8 +24,8 @@ namespace RealityV
 
         // Debug stuff
 #if DEBUG
-        ContainerElement Container = new ContainerElement(new PointF(Screen.Width - 200, Screen.Height - 32), new SizeF(200, 32), Color.FromArgb(200, 200, 200, 200));
-        TextElement Text = new TextElement("RealityV", new PointF(Screen.Width - 195, Screen.Height - 30), 0.30f, Color.Black, GTA.UI.Font.ChaletLondon);
+        ContainerElement Container = new ContainerElement(new PointF(GTA.UI.Screen.Width - 200, GTA.UI.Screen.Height - 32), new SizeF(200, 32), Color.FromArgb(200, 200, 200, 200));
+        TextElement Text = new TextElement("RealityV", new PointF(GTA.UI.Screen.Width - 195, GTA.UI.Screen.Height - 30), 0.30f, Color.Black, GTA.UI.Font.ChaletLondon);
         ObjectPool MainPool = new ObjectPool();
         NativeMenu Menu = new NativeMenu("RealityV Debug Menu", "Debug options");
         NativeItem DrainFuel = new NativeItem("Drain fuel", "Drains all of the fuel out of your vehicle");
